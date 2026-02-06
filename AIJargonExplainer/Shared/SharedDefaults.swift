@@ -1,14 +1,10 @@
 import Foundation
 
-/// Wrapper around App Group UserDefaults for sharing data between the main app and keyboard extension.
+/// Simplified API key access — reads directly from Constants.swift.
+/// No App Groups needed. Just paste your key in Constants.swift.
 struct SharedDefaults {
 
-    static var shared: UserDefaults? {
-        UserDefaults(suiteName: AppConstants.appGroupID)
-    }
-
     static var apiKey: String {
-        get { shared?.string(forKey: AppConstants.apiKeyStorageKey) ?? "" }
-        set { shared?.set(newValue, forKey: AppConstants.apiKeyStorageKey) }
+        return AppConstants.geminiAPIKey
     }
 }

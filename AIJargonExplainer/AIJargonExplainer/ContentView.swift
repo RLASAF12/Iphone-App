@@ -1,52 +1,41 @@
 import SwiftUI
 
 struct ContentView: View {
-    @AppStorage(AppConstants.apiKeyStorageKey, store: UserDefaults(suiteName: AppConstants.appGroupID))
-    var apiKey: String = ""
-
-    @State private var showKey = false
     @State private var testText = "This new RAG pipeline uses fine-tuned LLMs with RLHF to improve zero-shot performance on NLP benchmarks."
     @State private var testResult = ""
     @State private var isTesting = false
 
     private let geminiService = GeminiService()
 
+    private var hasAPIKey: Bool {
+        AppConstants.geminiAPIKey != "PASTE_YOUR_GEMINI_API_KEY_HERE" && !AppConstants.geminiAPIKey.isEmpty
+    }
+
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
 
-                    // --- API Key Section ---
+                    // --- API Key Status ---
                     GroupBox {
                         VStack(alignment: .leading, spacing: 12) {
-                            Label("Gemini API Key", systemImage: "key.fill")
+                            Label("API Key Status", systemImage: "key.fill")
                                 .font(.headline)
 
-                            HStack {
-                                if showKey {
-                                    TextField("Paste your API key here", text: $apiKey)
-                                        .textFieldStyle(.roundedBorder)
-                                        .autocapitalization(.none)
-                                        .disableAutocorrection(true)
-                                } else {
-                                    SecureField("Paste your API key here", text: $apiKey)
-                                        .textFieldStyle(.roundedBorder)
-                                }
-                                Button(action: { showKey.toggle() }) {
-                                    Image(systemName: showKey ? "eye.slash" : "eye")
-                                        .foregroundColor(.secondary)
-                                }
+                            if hasAPIKey {
+                                Label("Gemini API key is configured", systemImage: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                            } else {
+                                Label("API key not set yet", systemImage: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.orange)
+                                Text("Open Shared/Constants.swift in Xcode and paste your Gemini API key.")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
                             }
 
                             Text("Get your free key at ai.google.dev")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
-
-                            if !apiKey.isEmpty {
-                                Label("Key saved", systemImage: "checkmark.circle.fill")
-                                    .font(.caption)
-                                    .foregroundColor(.green)
-                            }
                         }
                     }
 
@@ -102,11 +91,11 @@ struct ContentView: View {
                                 }
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 10)
-                                .background(apiKey.isEmpty ? Color.gray : Color.blue)
+                                .background(!hasAPIKey ? Color.gray : Color.blue)
                                 .foregroundColor(.white)
                                 .cornerRadius(8)
                             }
-                            .disabled(apiKey.isEmpty || isTesting)
+                            .disabled(!hasAPIKey || isTesting)
 
                             if !testResult.isEmpty {
                                 Text(testResult)
@@ -126,7 +115,7 @@ struct ContentView: View {
     }
 
     private func runTest() {
-        guard !apiKey.isEmpty, !testText.isEmpty else { return }
+        guard hasAPIKey, !testText.isEmpty else { return }
         isTesting = true
         testResult = ""
 
