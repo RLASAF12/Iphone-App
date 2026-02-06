@@ -18,6 +18,7 @@
 		A1B2C3D4E5F60002000B0009 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0008 /* Constants.swift */; };
 		A1B2C3D4E5F60002000B000A /* SharedDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0009 /* SharedDefaults.swift */; };
 		A1B2C3D4E5F60002000B000B /* AIKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60004000D0002 /* AIKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A1B2C3D4E5F60002000B000C /* GeminiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0006 /* GeminiService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -228,6 +229,7 @@
 				A1B2C3D4E5F60002000B0002 /* ContentView.swift in Sources */,
 				A1B2C3D4E5F60002000B0004 /* Constants.swift in Sources */,
 				A1B2C3D4E5F60002000B0005 /* SharedDefaults.swift in Sources */,
+				A1B2C3D4E5F60002000B000C /* GeminiService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
