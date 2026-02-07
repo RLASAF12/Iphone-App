@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - AI Jargon Explainer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid #2a2a4a;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        header .app-name {
+            font-size: 1.1rem;
+            color: #7b8cde;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        header .last-updated {
+            font-size: 0.875rem;
+            color: #888;
+        }
+
+        h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #2a2a4a;
+        }
+
+        p {
+            margin-bottom: 14px;
+            color: #c8c8d8;
+        }
+
+        ul {
+            margin: 12px 0 18px 24px;
+            color: #c8c8d8;
+        }
+
+        ul li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: #e8e8f0;
+        }
+
+        a {
+            color: #7b8cde;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #9aa8f0;
+        }
+
+        .highlight-box {
+            background-color: #22223a;
+            border-left: 3px solid #7b8cde;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid #2a2a4a;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 16px 60px;
+            }
+
+            header h1 {
+                font-size: 1.6rem;
+            }
+
+            h2 {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Privacy Policy</h1>
+            <div class="app-name">AI Jargon Explainer</div>
+            <div class="last-updated">Last updated: February 2025</div>
+        </header>
+
+        <section>
+            <h2>Introduction</h2>
+            <p>
+                AI Jargon Explainer ("the App") is developed by Harel Asaf. This Privacy Policy
+                explains how the App handles your information. Your privacy is important, and the
+                App is designed to minimize data collection. The App does not collect, store, or
+                share personal data.
+            </p>
+        </section>
+
+        <section>
+            <h2>How the App Works</h2>
+            <p>
+                AI Jargon Explainer is a custom keyboard extension for iOS. When you copy text
+                to your clipboard and tap the "Explain" button, the App reads the clipboard
+                content, sends it to the Google Gemini API, and displays a plain-English
+                explanation of AI-related jargon.
+            </p>
+        </section>
+
+        <section>
+            <h2>Information We Collect</h2>
+            <div class="highlight-box">
+                <p>
+                    <strong>We do not collect any personal data.</strong> The App does not require
+                    user accounts, does not use analytics or tracking services, and does not gather
+                    device identifiers or usage statistics.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Data Processed Locally on Your Device</h2>
+            <p>The following data is stored entirely on your device and is never transmitted to any server:</p>
+            <ul>
+                <li><strong>API Key</strong> &mdash; Your Google Gemini API key is stored locally on your device using UserDefaults via App Groups. It is never sent to any server other than Google's Gemini API for authentication.</li>
+                <li><strong>Bookmarked Terms</strong> &mdash; Terms you choose to save are stored locally on your device using UserDefaults. They are not transmitted anywhere.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Clipboard Access</h2>
+            <p>
+                The App reads your clipboard <strong>only</strong> when you explicitly tap the
+                "Explain" button. The clipboard content is used solely to generate an explanation
+                and is not stored, logged, or transmitted to any party other than the Google
+                Gemini API for processing. The App never reads your clipboard in the background
+                or without your direct action.
+            </p>
+            <p>
+                Clipboard access requires that you enable "Allow Full Access" for the keyboard
+                extension in your device's Settings. Without Full Access, the App cannot read
+                the clipboard or make network requests.
+            </p>
+        </section>
+
+        <section>
+            <h2>Third-Party Services</h2>
+            <p>
+                The App sends your clipboard text to the <strong>Google Gemini API</strong> to
+                generate explanations. This is the only third-party service used by the App. The
+                text is sent directly from your device to Google's servers for processing.
+            </p>
+            <p>
+                Google's handling of data sent to the Gemini API is governed by
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a>
+                and the
+                <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noopener noreferrer">Gemini API Terms of Service</a>.
+            </p>
+            <p>
+                The App does <strong>not</strong> use any analytics services, advertising
+                frameworks, crash reporting tools, or other third-party SDKs.
+            </p>
+        </section>
+
+        <section>
+            <h2>Data Sharing</h2>
+            <p>
+                The App does not share your data with third parties. The only external
+                communication is sending clipboard text to the Google Gemini API when you
+                explicitly request an explanation. No data is sold, rented, or disclosed to
+                advertisers, data brokers, or any other entities.
+            </p>
+        </section>
+
+        <section>
+            <h2>Data Retention</h2>
+            <p>
+                The App does not retain any data on external servers. All locally stored data
+                (your API key and bookmarked terms) remains on your device and can be deleted
+                at any time by removing the App.
+            </p>
+        </section>
+
+        <section>
+            <h2>Data Security</h2>
+            <p>
+                Your API key and bookmarked terms are stored using iOS UserDefaults within an
+                App Group container, which is sandboxed by the iOS operating system. Network
+                requests to the Google Gemini API are made over HTTPS, ensuring that data in
+                transit is encrypted.
+            </p>
+        </section>
+
+        <section>
+            <h2>Children's Privacy</h2>
+            <p>
+                The App is not directed at children under the age of 13. We do not knowingly
+                collect any personal information from children. Since the App does not collect
+                personal data from any user, no special provisions for children's data are
+                necessary.
+            </p>
+        </section>
+
+        <section>
+            <h2>Your Rights</h2>
+            <p>
+                Since the App does not collect or store personal data on any server, there is no
+                personal data to access, correct, or delete remotely. All data stored by the App
+                resides on your device and is fully under your control. You can delete all App
+                data by uninstalling the App from your device.
+            </p>
+        </section>
+
+        <section>
+            <h2>Changes to This Privacy Policy</h2>
+            <p>
+                This Privacy Policy may be updated from time to time. Any changes will be
+                reflected on this page with an updated "Last updated" date. Continued use of
+                the App after changes constitutes acceptance of the revised policy.
+            </p>
+        </section>
+
+        <section>
+            <h2>Contact Us</h2>
+            <p>
+                If you have any questions or concerns about this Privacy Policy or the App's
+                data practices, please contact:
+            </p>
+            <p>
+                <strong>Harel Asaf</strong><br>
+                Email: <a href="mailto:harelasaf@gmail.com">harelasaf@gmail.com</a>
+            </p>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 Harel Asaf. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
