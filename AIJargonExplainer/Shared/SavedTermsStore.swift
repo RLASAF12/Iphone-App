@@ -1,11 +1,16 @@
 import Foundation
 
-/// Persists saved terms to UserDefaults so they survive app restarts.
-/// Works in both the main app and keyboard extension.
+/// Persists saved terms using App Groups shared UserDefaults
+/// so the keyboard extension and main app stay in sync.
 class SavedTermsStore: ObservableObject {
     @Published var terms: [ExplainedTerm] = []
 
     private let storageKey = "saved_terms"
+
+    /// Shared container between app and keyboard extension
+    private var defaults: UserDefaults {
+        UserDefaults(suiteName: "group.com.harelasaf.aijargonexplainer") ?? .standard
+    }
 
     init() {
         load()
@@ -19,7 +24,7 @@ class SavedTermsStore: ObservableObject {
     }
 
     func remove(_ term: ExplainedTerm) {
-        terms.removeAll { $0.id == term.id }
+        terms.removeAll { $0.term == term.term }
         persist()
     }
 
@@ -32,14 +37,19 @@ class SavedTermsStore: ObservableObject {
         terms.contains(where: { $0.term == term.term })
     }
 
+    /// Reload from shared storage (call when app comes to foreground)
+    func reload() {
+        load()
+    }
+
     private func persist() {
         if let data = try? JSONEncoder().encode(terms) {
-            UserDefaults.standard.set(data, forKey: storageKey)
+            defaults.set(data, forKey: storageKey)
         }
     }
 
     private func load() {
-        if let data = UserDefaults.standard.data(forKey: storageKey),
+        if let data = defaults.data(forKey: storageKey),
            let decoded = try? JSONDecoder().decode([ExplainedTerm].self, from: data) {
             terms = decoded
         }

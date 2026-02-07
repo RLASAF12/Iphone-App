@@ -10,6 +10,7 @@ struct KeyboardView: View {
     @State private var copiedFeedback = false
     @State private var hasContent = false
     @State private var errorMessage: String? = nil
+    @State private var showSavedTerms = false
     @StateObject private var savedTerms = SavedTermsStore()
 
     private let geminiService = GeminiService()
@@ -54,28 +55,18 @@ struct KeyboardView: View {
                                 .font(.system(size: 11, weight: .medium))
                                 .foregroundColor(.purple)
                         }
-                    } else if !savedTerms.terms.isEmpty {
-                        HStack(spacing: 4) {
-                            Image(systemName: "bookmark.fill")
-                                .font(.system(size: 9))
-                                .foregroundColor(.yellow)
-                            Text("\(savedTerms.terms.count)")
-                                .font(.system(size: 11, weight: .bold))
-                                .foregroundColor(.yellow.opacity(0.8))
-                        }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                        .background(Color.yellow.opacity(0.12))
-                        .cornerRadius(10)
                     }
                 }
                 .padding(.horizontal, 12)
                 .padding(.top, 6)
-                .padding(.bottom, 5)
+                .padding(.bottom, 4)
 
-                // --- Results Area ---
+                // --- Results Area (taller — globe row removed) ---
                 ScrollView(.vertical, showsIndicators: false) {
-                    if let errorMessage = errorMessage {
+                    if showSavedTerms {
+                        // Show saved terms list
+                        savedTermsOverlay
+                    } else if let errorMessage = errorMessage {
                         // Error state
                         HStack(spacing: 10) {
                             ZStack {
@@ -123,22 +114,24 @@ struct KeyboardView: View {
                         .padding(.top, 28)
                     }
                 }
-                .frame(height: 148)
+                .frame(height: 170)
                 .background(Color.white.opacity(0.03))
                 .cornerRadius(12)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(
-                            hasContent && errorMessage == nil
-                                ? Color.purple.opacity(0.2)
-                                : Color.white.opacity(0.06),
+                            showSavedTerms
+                                ? Color.yellow.opacity(0.25)
+                                : (hasContent && errorMessage == nil
+                                    ? Color.purple.opacity(0.2)
+                                    : Color.white.opacity(0.06)),
                             lineWidth: 1
                         )
                 )
                 .padding(.horizontal, 8)
 
                 // --- Action Buttons Row ---
-                HStack(spacing: 6) {
+                HStack(spacing: 5) {
                     // Explain button — hero CTA
                     Button(action: explainClipboard) {
                         HStack(spacing: 5) {
@@ -168,7 +161,7 @@ struct KeyboardView: View {
                     Button(action: clearContent) {
                         Image(systemName: "xmark")
                             .font(.system(size: 12, weight: .bold))
-                            .frame(width: 42)
+                            .frame(width: 38)
                             .padding(.vertical, 11)
                             .background(Color.white.opacity(0.07))
                             .foregroundColor(.white.opacity(0.5))
@@ -190,30 +183,84 @@ struct KeyboardView: View {
                         .cornerRadius(10)
                     }
                     .disabled(!hasContent || explainedTerms.isEmpty)
+
+                    // Saved terms toggle button
+                    Button(action: {
+                        withAnimation(.spring(response: 0.3)) {
+                            showSavedTerms.toggle()
+                        }
+                    }) {
+                        ZStack(alignment: .topTrailing) {
+                            Image(systemName: showSavedTerms ? "bookmark.fill" : "bookmark")
+                                .font(.system(size: 13, weight: .medium))
+                                .frame(width: 38)
+                                .padding(.vertical, 11)
+                                .background(showSavedTerms ? Color.yellow.opacity(0.15) : Color.white.opacity(0.07))
+                                .foregroundColor(showSavedTerms ? .yellow : .white.opacity(0.5))
+                                .cornerRadius(10)
+
+                            // Badge count
+                            if !savedTerms.terms.isEmpty {
+                                Text("\(savedTerms.terms.count)")
+                                    .font(.system(size: 9, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .frame(width: 16, height: 16)
+                                    .background(Color.yellow.opacity(0.8))
+                                    .clipShape(Circle())
+                                    .offset(x: 4, y: -4)
+                            }
+                        }
+                    }
                 }
                 .padding(.horizontal, 8)
                 .padding(.top, 6)
+                .padding(.bottom, 4)
 
-                // --- Bottom Row: Globe Key ---
-                HStack {
-                    Button(action: onNextKeyboard) {
-                        Image(systemName: "globe")
-                            .font(.system(size: 20))
-                            .padding(6)
-                            .foregroundColor(.white.opacity(0.4))
-                    }
-                    Spacer()
-                }
-                .padding(.horizontal, 8)
-                .padding(.top, 3)
-                .padding(.bottom, 2)
+                // No globe row — iOS provides the system globe key already
             }
         }
+    }
+
+    // MARK: - Saved Terms Overlay (shown inside the results area)
+
+    private var savedTermsOverlay: some View {
+        VStack(spacing: 5) {
+            if savedTerms.terms.isEmpty {
+                VStack(spacing: 8) {
+                    Image(systemName: "bookmark")
+                        .font(.system(size: 22))
+                        .foregroundColor(.white.opacity(0.15))
+                    Text("No saved terms yet")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(.white.opacity(0.25))
+                    Text("Tap the bookmark icon on any term to save it")
+                        .font(.system(size: 11))
+                        .foregroundColor(.white.opacity(0.15))
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.top, 24)
+            } else {
+                ForEach(savedTerms.terms) { term in
+                    KBTermCard(term: term, isSaved: true) {
+                        withAnimation(.spring(response: 0.3)) {
+                            savedTerms.remove(term)
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.horizontal, 4)
+        .padding(.vertical, 4)
     }
 
     // MARK: - Actions
 
     private func explainClipboard() {
+        // Switch back to results view if showing saved terms
+        if showSavedTerms {
+            showSavedTerms = false
+        }
+
         guard hasFullAccess else {
             errorMessage = "Full Access required. Go to Settings > General > Keyboard > Keyboards > AIKeyboard > Allow Full Access"
             hasContent = true
@@ -256,6 +303,7 @@ struct KeyboardView: View {
             explainedTerms = []
             errorMessage = nil
             hasContent = false
+            showSavedTerms = false
         }
     }
 

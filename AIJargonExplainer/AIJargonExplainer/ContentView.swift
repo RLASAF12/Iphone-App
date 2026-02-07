@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
     @State private var testText = "This new RAG pipeline uses fine-tuned LLMs with RLHF to improve zero-shot performance on NLP benchmarks."
     @State private var explainedTerms: [ExplainedTerm] = []
     @State private var isTesting = false
@@ -43,6 +44,11 @@ struct ContentView: View {
             }
         }
         .preferredColorScheme(.dark)
+        .onChange(of: scenePhase) { newPhase in
+            if newPhase == .active {
+                savedTerms.reload()
+            }
+        }
     }
 
     // MARK: - Hero Section
