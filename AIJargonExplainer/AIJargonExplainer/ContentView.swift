@@ -1,7 +1,9 @@
 import SwiftUI
+import StoreKit
 
 struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.requestReview) private var requestReview
     @State private var testText = "This new RAG pipeline uses fine-tuned LLMs with RLHF to improve zero-shot performance on NLP benchmarks."
     @State private var explainedTerms: [ExplainedTerm] = []
     @State private var isTesting = false
@@ -222,7 +224,21 @@ struct ContentView: View {
     }
 
     private var footerSection: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 12) {
+            Button(action: {
+                requestReview()
+            }) {
+                HStack(spacing: 6) {
+                    Image(systemName: "star.fill").font(.system(size: 13))
+                    Text("Rate This App").font(.system(size: 14, weight: .semibold))
+                }
+                .foregroundColor(.yellow)
+                .padding(.horizontal, 24).padding(.vertical, 10)
+                .background(Color.yellow.opacity(0.1))
+                .cornerRadius(20)
+                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.yellow.opacity(0.2), lineWidth: 1))
+            }
+
             Text("Powered by Google Gemini").font(.system(size: 12, weight: .medium)).foregroundColor(.white.opacity(0.3))
             Text("Free tier: 15 requests/min").font(.system(size: 11)).foregroundColor(.white.opacity(0.2))
         }
@@ -239,10 +255,21 @@ struct ContentView: View {
             do {
                 let terms = try await geminiService.explainAITerms(text: testText)
                 withAnimation(.easeOut(duration: 0.3)) { explainedTerms = terms }
+                askForReviewIfNeeded()
             } catch {
                 withAnimation { explainedTerms = [ExplainedTerm(term: "Error", explanation: error.localizedDescription)] }
             }
             isTesting = false
+        }
+    }
+
+    private func askForReviewIfNeeded() {
+        let key = "explain_count"
+        let count = UserDefaults.standard.integer(forKey: key) + 1
+        UserDefaults.standard.set(count, forKey: key)
+        // Ask for review after 3rd successful explanation
+        if count == 3 {
+            requestReview()
         }
     }
 }
